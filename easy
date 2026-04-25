@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Office of the Executive | Harvard University</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --harvard-crimson: #A51C30;
+            --charcoal: #293333;
+            --off-white: #F3F3F1;
+            --gold: #C4961A;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            background-color: var(--off-white);
+            color: var(--charcoal);
+        }
+
+        /* Sidebar Navigation */
+        nav {
+            width: 260px;
+            background-color: var(--harvard-crimson);
+            color: white;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand {
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem;
+            margin: 0.2rem 0;
+            border-radius: 4px;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        nav a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        nav i { margin-right: 12px; width: 20px; }
+
+        /* Main Dashboard */
+        main {
+            flex-grow: 1;
+            padding: 2.5rem;
+            overflow-y: auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .status-badge {
+            background: white;
+            padding: 0.5rem 1rem;
+            border-left: 4px solid var(--gold);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            font-style: italic;
+        }
+
+        /* Email List Mockup */
+        .email-stack {
+            background: white;
+            border-radius: 2px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .email-item {
+            padding: 1.2rem;
+            border-bottom: 1px solid #eee;
+            display: grid;
+            grid-template-columns: 150px 1fr 100px;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .email-item:hover {
+            background-color: #fafafa;
+            transform: scale(1.002);
+        }
+
+        .sender { font-weight: bold; color: var(--harvard-crimson); }
+        .subject { color: var(--charcoal); }
+        .time { text-align: right; color: #888; font-size: 0.85rem; }
+
+        .urgent { border-left: 4px solid var(--harvard-crimson); }
+
+        h2 { border-bottom: 2px solid var(--harvard-crimson); display: inline-block; padding-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="brand">Harvard Executive</div>
+        <a href="#"><i class="fas fa-inbox"></i> Inbox (42)</a>
+        <a href="#"><i class="fas fa-paper-plane"></i> Sent Correspondence</a>
+        <a href="#"><i class="fas fa-calendar-alt"></i> Provost Briefing</a>
+        <a href="#"><i class="fas fa-archive"></i> Archive</a>
+        <a href="#"><i class="fas fa-cog"></i> Preferences</a>
+    </nav>
+
+    <main>
+        <header>
+            <div>
+                <h1>Daily Correspondence</h1>
+                <p>Welcome back, Dean. You have 3 priority memos requiring signatures.</p>
+            </div>
+            <div class="status-badge">
+                Status: In-Office (Massachusetts Hall)
+            </div>
+        </header>
+
+        <section>
+            <h2>Priority Inbox</h2>
+            <div class="email-stack">
+                <div class="email-item urgent">
+                    <div class="sender">Office of the President</div>
+                    <div class="subject">Commencement 2026: Security Protocol Review</div>
+                    <div class="time">08:42 AM</div>
+                </div>
+                <div class="email-item">
+                    <div class="sender">Department Head (EE)</div>
+                    <div class="subject">Grant Proposal: Quantum Computing Lab Expansion</div>
+                    <div class="time">07:15 AM</div>
+                </div>
+                <div class="email-item">
+                    <div class="sender">Harvard Alumni Assoc.</div>
+                    <div class="subject">Donor Gala Guest List - Final Approval Needed</div>
+                    <div class="time">Yesterday</div>
+                </div>
+                <div class="email-item">
+                    <div class="sender">Facilities Mgmt</div>
+                    <div class="subject">Scheduled Maintenance: Widener Library North Wing</div>
+                    <div class="time">Yesterday</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>
