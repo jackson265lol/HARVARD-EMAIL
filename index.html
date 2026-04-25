@@ -8,157 +8,124 @@
     <style>
         :root {
             --harvard-crimson: #A51C30;
-            --charcoal: #293333;
             --off-white: #F3F3F1;
-            --gold: #C4961A;
+            --border-color: #DCDCDC;
         }
 
-        body {
-            font-family: 'Georgia', serif;
-            margin: 0;
-            display: flex;
-            height: 100vh;
-            background-color: var(--off-white);
-            color: var(--charcoal);
-        }
-
-        /* Sidebar Navigation */
-        nav {
-            width: 260px;
-            background-color: var(--harvard-crimson);
+        body, html { height: 100%; margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; }
+        
+        /* Layout */
+        .app-container { display: flex; height: 100vh; flex-direction: column; }
+        
+        /* Top Bar */
+        .top-bar {
+            background: var(--harvard-crimson);
             color: white;
-            padding: 2rem 1rem;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .brand {
-            font-size: 1.2rem;
-            font-weight: bold;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            padding-bottom: 1rem;
-            margin-bottom: 2rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            padding: 0.8rem;
-            margin: 0.2rem 0;
-            border-radius: 4px;
-            transition: background 0.3s;
-            display: flex;
-            align-items: center;
-        }
-
-        nav a:hover {
-            background-color: rgba(255,255,255,0.1);
-        }
-
-        nav i { margin-right: 12px; width: 20px; }
-
-        /* Main Dashboard */
-        main {
-            flex-grow: 1;
-            padding: 2.5rem;
-            overflow-y: auto;
-        }
-
-        header {
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 3rem;
+            font-weight: bold;
+            font-family: 'Georgia', serif;
         }
 
-        .status-badge {
-            background: white;
-            padding: 0.5rem 1rem;
-            border-left: 4px solid var(--gold);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            font-style: italic;
-        }
+        /* Main Section */
+        .main-content { display: flex; flex: 1; overflow: hidden; }
 
-        /* Email List Mockup */
-        .email-stack {
-            background: white;
-            border-radius: 2px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
+        /* Sidebar */
+        .sidebar { width: 220px; background: #f8f8f8; border-right: 1px solid var(--border-color); padding: 15px 0; }
+        .nav-item { padding: 10px 25px; cursor: pointer; color: #444; display: flex; align-items: center; }
+        .nav-item:hover { background: #e0e0e0; }
+        .nav-item.active { color: var(--harvard-crimson); font-weight: bold; background: #f0f0f0; border-left: 4px solid var(--harvard-crimson); }
+        .nav-item i { margin-right: 15px; width: 20px; }
 
-        .email-item {
-            padding: 1.2rem;
-            border-bottom: 1px solid #eee;
-            display: grid;
-            grid-template-columns: 150px 1fr 100px;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
+        /* Email List (Scrollable) */
+        .email-list { width: 450px; border-right: 1px solid var(--border-color); overflow-y: scroll; background: white; }
+        .email-card { padding: 15px; border-bottom: 1px solid #eee; cursor: pointer; position: relative; }
+        .email-card:hover { background: #f9f9f9; }
+        .unread { font-weight: bold; border-left: 4px solid var(--harvard-crimson); }
+        .sender { font-size: 0.9rem; color: var(--harvard-crimson); margin-bottom: 3px; }
+        .subject { font-size: 0.85rem; margin-bottom: 5px; color: #333; }
+        .preview { font-size: 0.8rem; color: #777; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .email-item:hover {
-            background-color: #fafafa;
-            transform: scale(1.002);
-        }
-
-        .sender { font-weight: bold; color: var(--harvard-crimson); }
-        .subject { color: var(--charcoal); }
-        .time { text-align: right; color: #888; font-size: 0.85rem; }
-
-        .urgent { border-left: 4px solid var(--harvard-crimson); }
-
-        h2 { border-bottom: 2px solid var(--harvard-crimson); display: inline-block; padding-bottom: 5px; }
+        /* Reading Pane */
+        .reading-pane { flex: 1; padding: 40px; background: white; overflow-y: auto; }
+        .email-header { border-bottom: 1px solid #eee; padding-bottom: 20px; margin-bottom: 20px; }
+        .thread-bubble { background: #f1f1f1; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #e0e0e0; }
+        .me { background: #fff; border-left: 4px solid var(--harvard-crimson); }
+        
+        .harvard-seal { opacity: 0.1; position: fixed; bottom: 20px; right: 20px; width: 200px; z-index: -1; }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="brand">Harvard Executive</div>
-        <a href="#"><i class="fas fa-inbox"></i> Inbox (42)</a>
-        <a href="#"><i class="fas fa-paper-plane"></i> Sent Correspondence</a>
-        <a href="#"><i class="fas fa-calendar-alt"></i> Provost Briefing</a>
-        <a href="#"><i class="fas fa-archive"></i> Archive</a>
-        <a href="#"><i class="fas fa-cog"></i> Preferences</a>
-    </nav>
+<div class="app-container">
+    <div class="top-bar">
+        <div><i class="fas fa-university"></i> HARVARD UNIVERSITY | Executive Correspondence</div>
+        <div><i class="fas fa-user-circle"></i> Office of the Dean</div>
+    </div>
 
-    <main>
-        <header>
-            <div>
-                <h1>Daily Correspondence</h1>
-                <p>Welcome back, Dean. You have 3 priority memos requiring signatures.</p>
-            </div>
-            <div class="status-badge">
-                Status: In-Office (Massachusetts Hall)
-            </div>
-        </header>
+    <div class="main-content">
+        <div class="sidebar">
+            <div class="nav-item active"><i class="fas fa-inbox"></i> Inbox (482)</div>
+            <div class="nav-item"><i class="fas fa-star"></i> Flagged</div>
+            <div class="nav-item"><i class="fas fa-paper-plane"></i> Sent</div>
+            <div class="nav-item"><i class="fas fa-file"></i> Drafts</div>
+            <div class="nav-item"><i class="fas fa-trash"></i> Deleted</div>
+        </div>
 
-        <section>
-            <h2>Priority Inbox</h2>
-            <div class="email-stack">
-                <div class="email-item urgent">
-                    <div class="sender">Office of the President</div>
-                    <div class="subject">Commencement 2026: Security Protocol Review</div>
-                    <div class="time">08:42 AM</div>
-                </div>
-                <div class="email-item">
-                    <div class="sender">Department Head (EE)</div>
-                    <div class="subject">Grant Proposal: Quantum Computing Lab Expansion</div>
-                    <div class="time">07:15 AM</div>
-                </div>
-                <div class="email-item">
-                    <div class="sender">Harvard Alumni Assoc.</div>
-                    <div class="subject">Donor Gala Guest List - Final Approval Needed</div>
-                    <div class="time">Yesterday</div>
-                </div>
-                <div class="email-item">
-                    <div class="sender">Facilities Mgmt</div>
-                    <div class="subject">Scheduled Maintenance: Widener Library North Wing</div>
-                    <div class="time">Yesterday</div>
-                </div>
+        <div class="email-list" id="list">
+            <div class="email-card unread">
+                <div class="sender">President's Office</div>
+                <div class="subject">URGENT: Fall Budget Approval</div>
+                <div class="preview">Dean, we need your final signature on the endowment allocation for...</div>
             </div>
-        </section>
-    </main>
+            <div class="email-card">
+                <div class="sender">Prof. Alastair Norcross</div>
+                <div class="subject">RE: Marginal Cases Syllabus</div>
+                <div class="preview">Thank you for the feedback on the moral philosophy module...</div>
+            </div>
+            </div>
+
+        <div class="reading-pane">
+            <div class="email-header">
+                <h1>RE: Comparative Politics Final Exam</h1>
+                <p><strong>From:</strong> Registrar's Office &lt;registrar@harvard.edu&gt;</p>
+                <p><strong>Date:</strong> April 24, 2026</p>
+            </div>
+
+            <div class="thread-bubble">
+                <strong>Registrar:</strong> Dean, students are asking if the final exam weight is still set at 35%?
+            </div>
+            <div class="thread-bubble me">
+                <strong>Me:</strong> Yes, please confirm with the department that the 91.59% threshold for honors remains unchanged.
+            </div>
+            <div class="thread-bubble">
+                <strong>Registrar:</strong> Understood. We will update the portal tonight.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // This script generates the "Hundreds" of emails so you don't have to write them manually
+    const list = document.getElementById('list');
+    const names = ["Admissions", "Harvard Crimson", "Dept. of History", "Provost", "Alumni Relations", "Security Services"];
+    const subjects = ["Meeting Request", "Weekly Briefing", "Campus Update", "Grant Opportunity", "Action Required", "Inquiry"];
+
+    for (let i = 0; i < 200; i++) {
+        const div = document.createElement('div');
+        div.className = 'email-card';
+        const randomName = names[Math.floor(Math.random() * names.length)];
+        const randomSub = subjects[Math.floor(Math.random() * subjects.length)];
+        div.innerHTML = `
+            <div class="sender">${randomName}</div>
+            <div class="subject">${randomSub} #${1000 + i}</div>
+            <div class="preview">Following up on our previous conversation regarding the university's...</div>
+        `;
+        list.appendChild(div);
+    }
+</script>
 
 </body>
 </html>
