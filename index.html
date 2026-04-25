@@ -3,104 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Executive Correspondence | Harvard University</title>
+    <title>Executive Terminal | Harvard University</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --crimson: #A51C30; --gold: #C4961A; --bg: #f4f1ea; --text: #293333; }
-        body, html { height: 100%; margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); overflow: hidden; color: var(--text); }
+        :root { --crimson: #A51C30; --gold: #C4961A; --sidebar: #1a1a1a; --bg: #f5f5f7; }
+        body, html { height: 100%; margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); overflow: hidden; }
         
-        .app { display: grid; grid-template-columns: 260px 400px 1fr; height: 100vh; }
+        .app { display: grid; grid-template-columns: 240px 420px 1fr; height: 100vh; }
         
-        /* Navigation Sidebar */
-        .nav { background: #1a1a1a; color: #fff; display: flex; flex-direction: column; padding: 25px 0; }
-        .nav-logo { padding: 0 25px 30px; border-bottom: 1px solid #333; margin-bottom: 20px; font-family: 'Georgia', serif; font-size: 1.2rem; color: var(--crimson); font-weight: bold; letter-spacing: 1px; }
-        .nav-item { padding: 14px 25px; cursor: pointer; color: #999; transition: 0.2s; display: flex; align-items: center; font-size: 0.9rem; }
-        .nav-item:hover { color: #fff; background: #2a2a2a; }
-        .nav-item.active { background: var(--crimson); color: white; box-shadow: inset 4px 0 0 var(--gold); }
-        .nav-item i { margin-right: 15px; width: 20px; text-align: center; }
+        /* Navigation */
+        .nav { background: var(--sidebar); color: #fff; display: flex; flex-direction: column; padding: 25px 0; }
+        .nav-logo { padding: 0 25px 25px; border-bottom: 1px solid #333; margin-bottom: 20px; font-family: 'Georgia', serif; font-size: 1.1rem; color: var(--crimson); font-weight: bold; }
+        .nav-item { padding: 12px 25px; cursor: pointer; color: #888; display: flex; align-items: center; font-size: 0.9rem; transition: 0.2s; }
+        .nav-item:hover { color: #fff; background: #222; }
+        .nav-item.active { background: var(--crimson); color: #fff; }
+        .nav-item i { margin-right: 15px; width: 18px; text-align: center; }
 
-        /* Email List */
-        .inbox { background: white; border-right: 1px solid #ddd; overflow-y: auto; box-shadow: 2px 0 10px rgba(0,0,0,0.02); }
-        .inbox-header { padding: 25px; border-bottom: 2px solid var(--bg); background: white; position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; }
-        .email-row { padding: 20px; border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: 0.2s; border-left: 4px solid transparent; }
-        .email-row:hover { background: #fdfdfd; }
-        .email-row.active { background: #fff9f9; border-left-color: var(--crimson); }
-        .sender { font-weight: 700; color: var(--crimson); font-size: 0.95rem; margin-bottom: 4px; }
-        .subj { font-size: 0.88rem; font-weight: 500; color: #444; margin-bottom: 6px; }
-        .prev { font-size: 0.8rem; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        /* Inbox List */
+        .inbox { background: white; border-right: 1px solid #ddd; overflow-y: auto; }
+        .inbox-header { padding: 20px 25px; background: white; border-bottom: 2px solid #f0f0f0; position: sticky; top: 0; z-index: 10; font-weight: 800; font-size: 1.2rem; }
+        .email-row { padding: 18px 25px; border-bottom: 1px solid #f8f8f8; cursor: pointer; border-left: 4px solid transparent; }
+        .email-row:hover { background: #fafafa; }
+        .email-row.active { background: #fff8f8; border-left-color: var(--crimson); }
+        .sender { font-weight: 700; color: #333; font-size: 0.9rem; display: flex; justify-content: space-between; }
+        .sender span { font-weight: 400; color: #aaa; font-size: 0.75rem; }
+        .subj { font-size: 0.85rem; color: #555; margin-top: 4px; font-weight: 500; }
+        .prev { font-size: 0.8rem; color: #999; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* Workspace & Chat */
-        .workspace { display: flex; flex-direction: column; background: white; position: relative; }
-        .chat-area { flex: 1; padding: 40px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; background: #fff; }
-        .msg { padding: 18px 22px; border-radius: 12px; max-width: 75%; line-height: 1.6; font-size: 0.95rem; position: relative; }
-        .msg.ai { background: #f8f8f8; align-self: flex-start; border: 1px solid #eee; color: #333; }
-        .msg.user { background: var(--crimson); color: white; align-self: flex-end; box-shadow: 0 4px 15px rgba(165, 28, 48, 0.15); }
-        .msg-info { font-size: 0.75rem; margin-bottom: 6px; opacity: 0.7; font-weight: bold; text-transform: uppercase; }
-        
-        /* Input Area */
-        .input-box { padding: 30px; border-top: 1px solid #eee; background: #fff; display: flex; gap: 15px; align-items: flex-end; }
-        textarea { flex: 1; border: 1px solid #ddd; border-radius: 8px; padding: 15px; height: 60px; resize: none; font-family: inherit; font-size: 0.95rem; transition: 0.2s; background: #fafafa; }
-        textarea:focus { outline: none; border-color: var(--crimson); background: white; box-shadow: 0 0 0 3px rgba(165, 28, 48, 0.05); }
-        .send-btn { background: var(--crimson); color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-weight: 700; letter-spacing: 1px; transition: 0.2s; }
-        .send-btn:hover { background: #8e1829; transform: translateY(-1px); }
+        /* Reading Pane */
+        .workspace { background: white; display: flex; flex-direction: column; box-shadow: inset 10px 0 20px rgba(0,0,0,0.02); }
+        .chat-area { flex: 1; padding: 40px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
+        .msg { padding: 15px 22px; border-radius: 12px; max-width: 80%; line-height: 1.5; font-size: 0.95rem; }
+        .msg.ai { background: #f1f1f1; align-self: flex-start; color: #333; border: 1px solid #e0e0e0; }
+        .msg.user { background: var(--crimson); color: white; align-self: flex-end; }
+        .msg-header { font-size: 0.7rem; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; opacity: 0.6; letter-spacing: 0.5px; }
 
-        .empty-state { text-align: center; color: #ccc; margin-top: 200px; }
-        .status-pill { font-size: 0.7rem; background: var(--gold); color: white; padding: 2px 8px; border-radius: 10px; margin-left: 10px; vertical-align: middle; }
+        /* Input */
+        .input-bar { padding: 30px; border-top: 1px solid #eee; background: white; display: flex; gap: 15px; align-items: flex-end; }
+        textarea { flex: 1; border: 1px solid #ddd; border-radius: 8px; padding: 15px; height: 50px; resize: none; font-family: inherit; font-size: 0.95rem; background: #fafafa; transition: 0.2s; }
+        textarea:focus { outline: none; border-color: var(--crimson); background: white; }
+        .send-btn { background: var(--crimson); color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .send-btn:hover { background: #8e1829; }
     </style>
 </head>
 <body>
 
 <div class="app">
     <div class="nav">
-        <div class="nav-logo">HARVARD <span style="font-weight:100; color:white;">EXEC</span></div>
-        <div class="nav-item active"><i class="fas fa-shield-alt"></i> Secure Inbox</div>
-        <div class="nav-item"><i class="fas fa-university"></i> Provost Memos</div>
-        <div class="nav-item"><i class="fas fa-file-signature"></i> SAA Internship</div>
-        <div class="nav-item"><i class="fas fa-user-friends"></i> Private (James)</div>
-        <div class="nav-item"><i class="fas fa-cog"></i> Terminal Settings</div>
+        <div class="nav-logo">UNIVERSITY <span style="font-weight:200;color:#fff">TERMINAL</span></div>
+        <div class="nav-item active"><i class="fas fa-inbox"></i> Inbox (102)</div>
+        <div class="nav-item"><i class="fas fa-shield-alt"></i> Provost Direct</div>
+        <div class="nav-item"><i class="fas fa-landmark"></i> SAA Internship</div>
+        <div class="nav-item"><i class="fas fa-history"></i> History Minor</div>
     </div>
 
     <div class="inbox" id="inboxList">
-        <div class="inbox-header">
-            <h2 style="margin:0; font-size: 1.2rem;">Correspondence</h2>
-            <i class="fas fa-filter" style="color:#aaa; cursor:pointer;"></i>
-        </div>
-        </div>
+        <div class="inbox-header">Strategic Mail</div>
+    </div>
 
     <div class="workspace">
         <div class="chat-area" id="chatArea">
-            <div class="empty-state">
-                <i class="fas fa-envelope-open-text fa-4x" style="margin-bottom:20px; opacity:0.5;"></i>
-                <p>Select a priority thread to begin executive review.</p>
+            <div style="text-align:center; color:#ccc; margin-top:150px;">
+                <i class="fas fa-university fa-4x" style="margin-bottom:20px;"></i>
+                <p>Welcome, Dean G.M. Select a thread to respond.</p>
             </div>
         </div>
-        <div class="input-box">
-            <textarea id="userInput" placeholder="Compose secure response..."></textarea>
+        <div class="input-bar">
+            <textarea id="userInput" placeholder="Draft your secure response..."></textarea>
             <button class="send-btn" onclick="handleSend()">SEND</button>
         </div>
     </div>
 </div>
 
 <script>
-    const emailData = [
-        { id: 0, from: "Provost Office", sub: "Aristotle vs. Mill Seminar", msg: "Dean, the Faculty of Arts and Sciences is split on the moral philosophy curriculum. Some argue Mill's Utilitarianism is too focused on outcomes. What is your stance on Aristotle's virtue ethics for the freshman module?" },
-        { id: 1, from: "Senate Sergeant at Arms", sub: "SAA Internship: HR Onboarding", msg: "Welcome to the team. Please confirm you have completed your fingerprinting at the Fairchild Building on April 10th. We need to finalize your summer access badge." },
-        { id: 2, from: "Comparative Politics Dept", sub: "Grade Review: 91.59%", msg: "Regarding the final exam weighting—students are concerned the 91.59% threshold is too stringent. Do you authorize a curve adjustment for the Spring semester?" },
-        { id: 3, from: "Melinda", sub: "Summer Housing & James", msg: "James mentioned you're staying with him again this summer. Should we coordinate the move-in for June, or wait until after your DC internship starts?" },
-        { id: 4, from: "Registrar", sub: "History Minor Credits", msg: "We are processing your inquiry regarding course credits. Which specific History modules are you planning to apply toward your minor?" }
+    // 100+ Emails generated automatically
+    const baseEmails = [
+        { id: 0, from: "Provost Office", sub: "Aristotle Curriculum Review", msg: "Dean, we are finalising the Spring 2027 syllabus. The Ethics committee is debating if we should prioritize Aristotle's Virtue Ethics or Mill's Utilitarianism. What is your final decision for the freshman core?" },
+        { id: 1, from: "Registrar Office", sub: "Grade Discrepancy (91.59%)", msg: "A student is contesting a final grade in Comparative Politics. They are exactly at the 91.59% threshold for a GPA bump. Do we hold firm on the rounding policy?" },
+        { id: 2, from: "Senate Sergeant at Arms", sub: "SAA Internship: Security Clearance", msg: "Dean, your summer internship onboarding requires a final signature on the Fairchild Building fingerprinting log. Please confirm this was completed on April 10th." },
+        { id: 3, from: "Dept of History", sub: "History Minor Credits", msg: "We have reviewed your credit transfer request. Which elective from your second semester would you like to count toward the History Minor?" },
+        { id: 4, from: "James (Cambridge)", sub: "Summer Housing Keys", msg: "Hey! Melinda says she can drop off the keys to the apartment whenever you're ready. Are you still planning on staying with me during the DC internship?" }
     ];
 
-    let activeEmailId = null;
+    // Generate 95 more filler emails
+    const senders = ["Harvard Alumni", "Facilities Mgmt", "Endowment Board", "Crimson Newspaper", "Student Council"];
+    const subjects = ["Meeting Request", "Budget Update", "Campus Safety", "Faculty Gala", "Library Access"];
+    for(let i=5; i<105; i++){
+        baseEmails.push({
+            id: i,
+            from: senders[i % senders.length],
+            sub: `${subjects[i % subjects.length]} #${i+200}`,
+            msg: "This is an automated executive notification regarding university operations. Please review the attached briefing at your earliest convenience."
+        });
+    }
+
+    let activeId = null;
 
     function renderInbox() {
         const list = document.getElementById('inboxList');
-        emailData.forEach(e => {
+        baseEmails.forEach(e => {
             const div = document.createElement('div');
             div.className = 'email-row';
-            div.id = `email-${e.id}`;
+            div.id = `row-${e.id}`;
             div.onclick = () => selectEmail(e.id);
             div.innerHTML = `
-                <div class="sender">${e.from} ${e.id < 3 ? '<span class="status-pill">URGENT</span>' : ''}</div>
+                <div class="sender">${e.from} <span>10:42 AM</span></div>
                 <div class="subj">${e.sub}</div>
                 <div class="prev">${e.msg}</div>
             `;
@@ -109,59 +116,45 @@
     }
 
     function selectEmail(id) {
-        activeEmailId = id;
+        activeId = id;
         document.querySelectorAll('.email-row').forEach(r => r.classList.remove('active'));
-        document.getElementById(`email-${id}`).classList.add('active');
-        
+        document.getElementById(`row-${id}`).classList.add('active');
         const chat = document.getElementById('chatArea');
-        chat.innerHTML = `
-            <div class="msg ai">
-                <div class="msg-info">ORIGINAL CORRESPONDENCE | FROM: ${emailData[id].from}</div>
-                ${emailData[id].msg}
-            </div>
-        `;
-        chat.scrollTop = 0;
+        chat.innerHTML = `<div class="msg ai"><div class="msg-header">Original Message</div>${baseEmails[id].msg}</div><div id="thread"></div>`;
     }
 
     function handleSend() {
         const text = document.getElementById('userInput').value;
-        if (!text || activeEmailId === null) return;
+        if (!text || activeId === null) return;
 
-        const chat = document.getElementById('chatArea');
-        chat.innerHTML += `
-            <div class="msg user">
-                <div class="msg-info">EXECUTIVE RESPONSE | DEAN G.M.</div>
-                ${text}
-            </div>
-        `;
+        const thread = document.getElementById('thread');
+        thread.innerHTML += `<div class="msg user"><div class="msg-header">Dean G.M.</div>${text}</div>`;
         document.getElementById('userInput').value = '';
-        chat.scrollTop = chat.scrollHeight;
+        
+        const chatArea = document.getElementById('chatArea');
+        chatArea.scrollTop = chatArea.scrollHeight;
 
-        // Logic Engine: Response based on your specific keywords
+        // Smart Response Logic
         setTimeout(() => {
             let response = "";
             const input = text.toLowerCase();
+            const currentSub = baseEmails[activeId].sub.toLowerCase();
 
-            if (input.includes("aristotle") || input.includes("virtue")) {
-                response = "An excellent point on eudaimonia. I agree that character-based ethics provide a more complete life-framework than simple utility. I'll pass this to the Provost.";
-            } else if (input.includes("fingerprint") || input.includes("saa") || input.includes("fairchild")) {
-                response = "Confirmed. We have noted your completion of the April 10th requirement. Your SAA HR file is now up to date for the summer internship.";
-            } else if (input.includes("91.59") || input.includes("curve") || input.includes("politics")) {
-                response = "I appreciate the feedback on the politics grading. I'll review the 91.59% threshold with the department head this afternoon.";
-            } else if (input.includes("james") || input.includes("housing")) {
-                response = "Copy that. We'll synchronize with James and Melinda to ensure the transition from Cambridge to DC is seamless.";
+            if (currentSub.includes("aristotle") || input.includes("aristotle") || input.includes("virtue")) {
+                response = "The Provost's Office has received your feedback. We will prioritize the Nicomachean Ethics for the Spring term as per your recommendation.";
+            } else if (currentSub.includes("grade") || input.includes("91.59") || input.includes("politics")) {
+                response = "Understood. The 91.59% threshold will be maintained to preserve academic integrity. The Registrar's portal will reflect this within 24 hours.";
+            } else if (currentSub.includes("saa") || input.includes("fingerprint") || input.includes("fairchild")) {
+                response = "Thank you, Dean. The SAA HR department has matched your Fairchild fingerprint record. Your summer security badge is now pending printing.";
+            } else if (currentSub.includes("housing") || input.includes("james") || input.includes("melinda")) {
+                response = "James has been notified. Melinda will leave the keys in the secure drop-box at the Cambridge residence.";
             } else {
-                response = "Acknowledged. This response has been logged in the Harvard executive archives and routed to the appropriate department.";
+                response = "Your executive order has been logged. I have forwarded this correspondence to the relevant department for immediate action.";
             }
 
-            chat.innerHTML += `
-                <div class="msg ai">
-                    <div class="msg-info">SECURE SYSTEM RESPONSE</div>
-                    ${response}
-                </div>
-            `;
-            chat.scrollTop = chat.scrollHeight;
-        }, 1500);
+            thread.innerHTML += `<div class="msg ai"><div class="msg-header">System Assistant</div>${response}</div>`;
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }, 1200);
     }
 
     renderInbox();
